@@ -1,4 +1,4 @@
-import socket, struct, win32api, win32con, pyautogui, time
+import socket, struct, win32api, win32con, pyautogui
 
 addr = ["ip","port"]
 server = socket.create_server(tuple(addr))
@@ -14,7 +14,7 @@ def doStuff():
 	while not clientSock._closed:
 		data = clientSock.recv(10)
 		if(data == b""):
-			print("Disconnected")
+			print("Disconnected, waiting for new client...")
 			break
 		try:
 			decoded = struct.unpack("<bbII",data)
@@ -30,8 +30,6 @@ def doStuff():
 				win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
 			else:
 				win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
-		#print("Got packet after waiting",time.time() - lastPacket)
-		#lastPacket = time.time()
 
 while True:
 	doStuff()
