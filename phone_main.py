@@ -8,8 +8,9 @@ windowSize = [1080, 1920]
 display = pygame.display.set_mode(windowSize)
 font = pygfont.SysFont("Arial",16)
 
-addr = ["ip","port"]
-server = socket.create_connection(addr)
+addr = ("ip","port")
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.connect(tuple(addr))
 
 pressPos = [[.5,.5],[.5,.5],[],[],[],[],[]]
 pressedFingers = [0] * 10
@@ -47,9 +48,9 @@ while True:
         posX = int((touchPos[0] - workZone.x) / workZone.width * resolution)
         posY = int((touchPos[1] - workZone.y) / workZone.height * resolution)
         
-    data = struct.pack("<bbII", baseResolution, lmbClick, posX, posY)
+    data = struct.pack("<bbIIc", baseResolution, lmbClick, posX, posY, "|")
     server.send(data)
     pygdraw.rect(display, sqColor, workZone)
     pygdraw.rect(display, (144,144,144), lmbClickZone)
     pygame.display.flip()
-    time.sleep(0.01)
+    time.sleep(0.001)
